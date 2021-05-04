@@ -39,6 +39,7 @@ connectButton.addEventListener('click', () => {
 
 disconnectButton.addEventListener('click',()=>{
   console.log("leave funcion called")
+  await setLocalStream(mediaConstraints)
   leave(roomId);
 })
 
@@ -119,20 +120,20 @@ function leave(room) {
   if (room === '') {
     alert('Please type a room ID')
   }
-  setLocalStream(mediaConstraints)
+  //setLocalStream(mediaConstraints)
   console.log("local stream" + localStream)
   var userStream = localStream;
   var audioTrack = userStream.getAudioTracks();
   if (audioTrack.length > 0) {
     userStream.removeTrack(audioTrack[0]);
-    var video = document.getElementById('remote-video');
+    var video = document.getElementById('local-video');
     video.src = window.URL.createObjectURL(userStream);
     }
 
     var videoTrack = userStream.getVideoTracks();
 if (videoTrack.length > 0) {
 userStream.removeTrack(videoTrack[0]);
-var video = document.getElementById('remote-video');
+var video = document.getElementById('local-video');
 video.src = window.URL.createObjectURL(userStream);
 }
   socket.emit('leave',room);
