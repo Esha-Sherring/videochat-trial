@@ -56,8 +56,14 @@
     <div id="video-chat-container" class="video-position" style="display: none">
       <video id="local-video" autoplay="autoplay" muted="muted"></video>
       <video id="remote-video" autoplay="autoplay"></video>
+      
     </div>
-
+    <nav>
+      <div>
+        <button id="disconnect-button"style="background-color: red;color: white;">DISCONNECT</button>
+      </div>
+    </nav>
+     
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="client.js"></script>
   </body>

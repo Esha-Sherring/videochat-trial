@@ -42,7 +42,13 @@ io.on('connection', (socket) => {
     console.log(`Broadcasting webrtc_ice_candidate event to peers in room ${event.roomId}`)
     socket.broadcast.to(event.roomId).emit('webrtc_ice_candidate', event)
   })
-})
+
+   socket.on('leave', (roomId) => {  
+    console.log(roomId)
+    
+   })
+  })
+
 
 // START THE SERVER =================================================================
 const port = process.env.PORT || 3000

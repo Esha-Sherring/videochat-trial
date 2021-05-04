@@ -2,6 +2,7 @@
 const roomSelectionContainer = document.getElementById('room-selection-container')
 const roomInput = document.getElementById('room-input')
 const connectButton = document.getElementById('connect-button')
+const disconnectButton = document.getElementById('disconnect-button')
 
 const videoChatContainer = document.getElementById('video-chat-container')
 const localVideoComponent = document.getElementById('local-video')
@@ -18,6 +19,7 @@ let remoteStream
 let isRoomCreator
 let rtcPeerConnection // Connection between the local device and the remote peer.
 let roomId
+let sender
 
 // Free public STUN servers provided by Google.
 const iceServers = {
@@ -33,6 +35,11 @@ const iceServers = {
 // BUTTON LISTENER ============================================================
 connectButton.addEventListener('click', () => {
   joinRoom(roomInput.value)
+})
+
+disconnectButton.addEventListener('click',()=>{
+  console.log("leave funcion called")
+  leave(roomId);
 })
 
 // SOCKET EVENT CALLBACKS =====================================================
@@ -107,6 +114,30 @@ function joinRoom(room) {
     socket.emit('join', room)
     showVideoConference()
   }
+}
+function leave(room) {
+  if (room === '') {
+    alert('Please type a room ID')
+  }
+  setLocalStream(mediaConstraints)
+  console.log("local stream" + localStream)
+  var userStream = localStream;
+  var audioTrack = userStream.getAudioTracks();
+  if (audioTrack.length > 0) {
+    userStream.removeTrack(audioTrack[0]);
+    var video = document.getElementById('remote-video');
+    video.src = window.URL.createObjectURL(userStream);
+    }
+
+    var videoTrack = userStream.getVideoTracks();
+if (videoTrack.length > 0) {
+userStream.removeTrack(videoTrack[0]);
+var video = document.getElementById('remote-video');
+video.src = window.URL.createObjectURL(userStream);
+}
+  socket.emit('leave',room);
+  socket.disconnect()
+ 
 }
 
 function showVideoConference() {
